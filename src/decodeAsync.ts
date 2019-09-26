@@ -18,6 +18,7 @@ export async function decodeAsync(
     options.maxArrayLength,
     options.maxMapLength,
     options.maxExtLength,
+    options.sortedKeys,
   );
   return decoder.decodeSingleAsync(stream);
 }
@@ -35,6 +36,7 @@ export function decodeArrayStream(
     options.maxArrayLength,
     options.maxMapLength,
     options.maxExtLength,
+    options.sortedKeys,
   );
 
   return decoder.decodeArrayStream(stream);
@@ -53,6 +55,7 @@ export function decodeStream(
     options.maxArrayLength,
     options.maxMapLength,
     options.maxExtLength,
+    options.sortedKeys,
   );
 
   return decoder.decodeStream(stream);

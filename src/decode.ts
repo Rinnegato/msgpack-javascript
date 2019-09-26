@@ -30,6 +30,10 @@ export type DecodeOptions = Partial<
      * Default to 4_294_967_295 (UINT32_MAX).
      */
     maxExtLength: number;
+    /**
+     * Check that Map Keys are sorted and not duplicated
+     */
+    sortedKeys: boolean;
   }>
 >;
 
@@ -51,6 +55,7 @@ export function decode(
     options.maxArrayLength,
     options.maxMapLength,
     options.maxExtLength,
+    options.sortedKeys,
   );
   decoder.setBuffer(buffer); // decodeSync() requires only one buffer
   return decoder.decodeSingleSync();

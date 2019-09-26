@@ -77,6 +77,7 @@ export class Decoder {
     readonly maxArrayLength = DEFAULT_MAX_LENGTH,
     readonly maxMapLength = DEFAULT_MAX_LENGTH,
     readonly maxExtLength = DEFAULT_MAX_LENGTH,
+    readonly sortedKeys = false,
     readonly cachedKeyDecoder: CachedKeyDecoder | null = sharedCachedKeyDecoder,
   ) {}
 
@@ -384,6 +385,9 @@ export class Decoder {
           if (!isValidMapKeyType(object)) {
             throw new Error("The type of key must be string or number but " + typeof object);
           }
+          if (this.sortedKeys && state.key && state.key >= object) {
+            throw new Error("Unordered or Duplicated Keys");
+          }
 
           state.key = object;
           state.type = State.MAP_VALUE;
@@ -397,7 +401,6 @@ export class Decoder {
             stack.pop();
             object = state.map;
           } else {
-            state.key = null;
             state.type = State.MAP_KEY;
             continue DECODE;
           }
