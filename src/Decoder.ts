@@ -574,13 +574,13 @@ export class Decoder {
     return value;
   }
 
-  readU64(): number {
+  readU64(): bigint {
     const value = getUint64(this.view, this.pos);
     this.pos += 8;
     return value;
   }
 
-  readI64(): number {
+  readI64(): bigint {
     const value = getInt64(this.view, this.pos);
     this.pos += 8;
     return value;

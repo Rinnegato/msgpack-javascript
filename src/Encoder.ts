@@ -32,6 +32,8 @@ export class Encoder {
       this.encodeBoolean(object);
     } else if (typeof object === "number") {
       this.encodeNumber(object);
+    } else if (typeof object === "bigint") {
+      this.encodeBigint(object);
     } else if (typeof object === "string") {
       this.encodeString(object);
     } else {
@@ -128,6 +130,26 @@ export class Encoder {
         // float 64
         this.writeU8(0xcb);
         this.writeF64(object);
+      }
+    }
+  }
+
+  encodeBigint(object: bigint) {
+    if (object >= 0) {
+      if (object < 0x100000000) {
+        this.encodeNumber(Number(object));
+      } else {
+        // uint 64
+        this.writeU8(0xcf);
+        this.writeU64(object);
+      }
+    } else {
+      if (object >= -0x80000000) {
+        this.encodeNumber(Number(object));
+      } else {
+        // int 64
+        this.writeU8(0xd3);
+        this.writeI64(object);
       }
     }
   }
@@ -366,14 +388,14 @@ export class Encoder {
     this.pos += 8;
   }
 
-  writeU64(value: number) {
+  writeU64(value: number | bigint) {
     this.ensureBufferSizeToWrite(8);
 
     setUint64(this.view, this.pos, value);
     this.pos += 8;
   }
 
-  writeI64(value: number) {
+  writeI64(value: number | bigint) {
     this.ensureBufferSizeToWrite(8);
 
     setInt64(this.view, this.pos, value);
